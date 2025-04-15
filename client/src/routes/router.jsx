@@ -13,7 +13,7 @@ import {
   //   DownloadCard,
   //   CreateCard
 } from "../pages/_index.js";
-import PrivateRoute from "./PrivateRoute.jsx";
+import ProtectedRoute from "./ProtectedRoute.jsx";
 // import AdminRoute from "./AdminRoute.jsx";
 // import QuickNav from "../components/layout/Navbar/QuickNav.jsx";
 // import Navbar from "../components/layout/Navbar/Navbar.jsx";
@@ -31,9 +31,9 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: (
-      <PrivateRoute>
-        <DashboardLayout />
-      </PrivateRoute>
+      // <ProtectedRoute>
+      <Dashboard />
+      // </ProtectedRoute>
     ),
     children: [
       { index: true, element: <Dashboard /> },
@@ -51,11 +51,11 @@ const router = createBrowserRouter([
   //   {
   //     path: "/onboarding",
   //     element: (
-  //       <PrivateRoute>
+  //       <ProtectedRoute>
   //         <Navbar />
   //         <QuickNav />
   //         <Onboarding />
-  //       </PrivateRoute>
+  //       </ProtectedRoute>
   //     ),
   //   },
   {
@@ -67,14 +67,14 @@ const router = createBrowserRouter([
 export default router;
 
 // Basic protected route
-// <PrivateRoute>
+// <ProtectedRoute>
 //   <DashboardLayout />
-// </PrivateRoute>
+// </ProtectedRoute>
 
 // Role-based route
-// <PrivateRoute allowedRoles={['premium', 'business']}>
+// <ProtectedRoute allowedRoles={['premium', 'business']}>
 //   <PremiumFeatures />
-// </PrivateRoute>
+// </ProtectedRoute>
 
 // Basic admin route
 // <AdminRoute>

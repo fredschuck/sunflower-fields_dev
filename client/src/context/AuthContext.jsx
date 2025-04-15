@@ -52,28 +52,28 @@ export const AuthProvider = ({ children }) => {
   }, [auth]);
 
   // Sign up with email and password
-  const signup = async (email, password, additionalInfo = {}) => {
+  const signup = async (userData = {}) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
-        email,
-        password
+        userData.email,
+        userData.password
       );
       const user = userCredential.user;
       const token = await user.getIdToken();
 
       // Create user item in DynamoDB users table
-      const response = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      //   const response = await fetch("/api/auth/signup", {
+      //     method: "POST",
+      //     headers: {
+      //       Authorization: `Bearer ${token}`,
+      //       "Content-Type": "application/json",
+      //     },
+      //   });
 
-      if (!response.ok) {
-        throw new Error("Failed to create user record in DynamoDB");
-      }
+      //   if (!response.ok) {
+      //     throw new Error("Failed to create user record in DynamoDB");
+      //   }
 
       return user;
     } catch (error) {
@@ -84,13 +84,13 @@ export const AuthProvider = ({ children }) => {
 
   // Login with email and password
   const login = async (email, password) => {
-    console.log("Login attempt for:", email);
     try {
       const authCredential = await signInWithEmailAndPassword(
         auth,
         email,
         password
       );
+      console.log("Login successful:", authCredential);
       return authCredential;
     } catch (error) {
       console.error("Login error:", error);
@@ -136,6 +136,7 @@ export const AuthProvider = ({ children }) => {
 
   // isAuthenticated
   const isAuthenticated = () => {
+    console.log("isAuthenticated:", !!user);
     return !!user;
   };
 
