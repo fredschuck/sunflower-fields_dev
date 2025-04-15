@@ -44,6 +44,8 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
     });
 
+    console.log("AuthProvider useEffect - User:", user);
+
     // Cleanup subscription
     return () => {
       console.log("Cleaning up auth listener");
@@ -59,6 +61,8 @@ export const AuthProvider = ({ children }) => {
         userData.email,
         userData.password
       );
+
+      console.log("Signup successful:", userCredential.user);
       const user = userCredential.user;
       const token = await user.getIdToken();
 
@@ -136,7 +140,6 @@ export const AuthProvider = ({ children }) => {
 
   // isAuthenticated
   const isAuthenticated = () => {
-    console.log("isAuthenticated:", !!user);
     return !!user;
   };
 
