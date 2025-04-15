@@ -1,21 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import {
-  // ChartBarIcon,
-  CloudIcon,
-  ExclamationCircleIcon,
-  CalendarIcon,
-  // CogIcon,
-  // CurrencyDollarIcon,
-  DocumentIcon,
-  // LocationMarkerIcon,
-  SparklesIcon,
-  RectangleGroupIcon,
-  ViewColumnsIcon,
-  // ArrowSmUpIcon,
-  // ArrowSmDownIcon,
-} from "@heroicons/react/24/outline";
+import Icon from "../../components/common/Icon";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -105,6 +91,7 @@ const Dashboard = () => {
         priority: "high",
         farm: "farm1",
         field: "field3",
+        iconName: "tree",
       },
       {
         id: 2,
@@ -113,6 +100,7 @@ const Dashboard = () => {
         priority: "medium",
         farm: "farm1",
         field: "field1",
+        iconName: "water",
       },
       {
         id: 3,
@@ -120,6 +108,7 @@ const Dashboard = () => {
         dueDate: "2023-05-15",
         priority: "medium",
         farm: "farm1",
+        iconName: "tractor",
       },
       {
         id: 4,
@@ -128,6 +117,7 @@ const Dashboard = () => {
         priority: "low",
         farm: "farm1",
         field: "field6",
+        iconName: "soil",
       },
     ]);
   };
@@ -141,6 +131,7 @@ const Dashboard = () => {
         message: "Frost warning for tomorrow morning",
         severity: "high",
         farm: "farm1",
+        iconName: "thermometer",
       },
       {
         id: 2,
@@ -149,6 +140,7 @@ const Dashboard = () => {
         severity: "medium",
         farm: "farm1",
         field: "field2",
+        iconName: "plant",
       },
       {
         id: 3,
@@ -156,6 +148,7 @@ const Dashboard = () => {
         message: "Tractor #2 maintenance due in 3 days",
         severity: "low",
         farm: "farm1",
+        iconName: "tractor",
       },
     ]);
   };
@@ -170,6 +163,18 @@ const Dashboard = () => {
       cropHealth: { good: 75, fair: 20, poor: 5 },
       soilMoisture: { optimal: 60, dry: 25, wet: 15 },
     });
+  };
+
+  // Weather icon mapping
+  const getWeatherIcon = (condition) => {
+    condition = condition.toLowerCase();
+    if (condition.includes("sunny") || condition.includes("clear"))
+      return "sun";
+    if (condition.includes("cloud")) return "cloud";
+    if (condition.includes("rain") || condition.includes("shower"))
+      return "rain";
+    if (condition.includes("wind")) return "wind";
+    return "cloud"; // Default icon
   };
 
   // Priority color mapping
@@ -218,7 +223,8 @@ const Dashboard = () => {
     <div className="px-4 sm:px-6 lg:px-8 py-8 max-w-7xl mx-auto">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900">
+          <h1 className="text-2xl font-semibold text-gray-900 flex items-center">
+            <Icon name="home" className="w-7 h-7 mr-2 text-green-600" />
             Farm Dashboard
           </h1>
           <p className="mt-1 text-sm text-gray-500">
@@ -249,8 +255,9 @@ const Dashboard = () => {
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <ViewColumnsIcon
-                  className="h-6 w-6 text-gray-400"
+                <Icon
+                  name="field"
+                  className="h-6 w-6 text-green-500"
                   aria-hidden="true"
                 />
               </div>
@@ -272,7 +279,7 @@ const Dashboard = () => {
             <div className="text-sm">
               <Link
                 to="/dashboard/fields"
-                className="font-medium text-green-700 hover:text-green-900"
+                className="font-medium text-green-700 hover:text-green-900 flex items-center"
               >
                 View all fields
               </Link>
@@ -285,8 +292,9 @@ const Dashboard = () => {
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <SparklesIcon
-                  className="h-6 w-6 text-gray-400"
+                <Icon
+                  name="plant"
+                  className="h-6 w-6 text-green-500"
                   aria-hidden="true"
                 />
               </div>
@@ -321,8 +329,9 @@ const Dashboard = () => {
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <CalendarIcon
-                  className="h-6 w-6 text-gray-400"
+                <Icon
+                  name="calendar"
+                  className="h-6 w-6 text-green-500"
                   aria-hidden="true"
                 />
               </div>
@@ -357,8 +366,9 @@ const Dashboard = () => {
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <RectangleGroupIcon
-                  className="h-6 w-6 text-gray-400"
+                <Icon
+                  name="tractor"
+                  className="h-6 w-6 text-green-500"
                   aria-hidden="true"
                 />
               </div>
@@ -397,7 +407,7 @@ const Dashboard = () => {
           <div className="bg-white shadow rounded-lg overflow-hidden">
             <div className="bg-green-700 px-4 py-5 sm:px-6">
               <h3 className="text-lg leading-6 font-medium text-white flex items-center">
-                <CloudIcon className="h-5 w-5 mr-2" />
+                <Icon name="cloud" className="h-5 w-5 mr-2" />
                 Weather Forecast
                 <span className="ml-2 text-sm text-green-200">
                   {farms.find((f) => f.id === selectedFarm)?.location ||
@@ -410,38 +420,68 @@ const Dashboard = () => {
               <div className="px-4 py-5 sm:p-6">
                 <div className="flex flex-col sm:flex-row sm:items-center mb-4">
                   <div className="mb-4 sm:mb-0 sm:mr-6 flex-shrink-0">
-                    <div className="text-4xl font-bold">
-                      {weather.current.temp}°F
+                    <div className="flex items-center">
+                      <Icon
+                        name="thermometer"
+                        className="h-8 w-8 text-gray-500 mr-2"
+                      />
+                      <div className="text-4xl font-bold">
+                        {weather.current.temp}°F
+                      </div>
                     </div>
-                    <div className="text-gray-500">
+                    <div className="text-gray-500 mt-1 flex items-center">
+                      <Icon name="cloud" className="h-5 w-5 mr-1" />
                       {weather.current.condition}
                     </div>
-                    <div className="mt-2 text-sm text-gray-500">
-                      <span>Humidity: {weather.current.humidity}%</span>
-                      <span className="ml-2">
-                        Wind: {weather.current.windSpeed} mph
+                    <div className="mt-2 text-sm text-gray-500 flex items-center space-x-3">
+                      <span className="flex items-center">
+                        <Icon name="water" className="h-4 w-4 mr-1" />
+                        {weather.current.humidity}%
+                      </span>
+                      <span className="flex items-center">
+                        <Icon name="wind" className="h-4 w-4 mr-1" />
+                        {weather.current.windSpeed} mph
                       </span>
                     </div>
                   </div>
 
                   <div className="flex-grow grid grid-cols-5 gap-2 text-center">
-                    {weather.forecast.map((day, index) => (
-                      <div key={index} className="bg-gray-50 rounded p-2">
-                        <div className="text-xs font-medium">{day.day}</div>
-                        <div className="text-sm font-semibold">{day.high}°</div>
-                        <div className="text-xs text-gray-500">{day.low}°</div>
-                        <div className="text-xs truncate">{day.condition}</div>
-                      </div>
-                    ))}
+                    {weather.forecast.map((day, index) => {
+                      const weatherIconName = getWeatherIcon(day.condition);
+                      return (
+                        <div key={index} className="bg-gray-50 rounded p-2">
+                          <div className="text-xs font-medium">{day.day}</div>
+                          <Icon
+                            name={weatherIconName}
+                            className="h-5 w-5 mx-auto my-1 text-gray-600"
+                          />
+                          <div className="text-sm font-semibold flex items-center justify-center">
+                            <Icon
+                              name="arrowUp"
+                              className="h-3 w-3 text-red-500"
+                            />
+                            {day.high}°
+                          </div>
+                          <div className="text-xs text-gray-500 flex items-center justify-center">
+                            <Icon
+                              name="arrowDown"
+                              className="h-3 w-3 text-blue-500"
+                            />
+                            {day.low}°
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
 
                 <div className="mt-4 text-sm">
                   <Link
                     to="/dashboard/weather"
-                    className="text-green-600 hover:text-green-900 font-medium"
+                    className="text-green-600 hover:text-green-900 font-medium flex items-center"
                   >
-                    View detailed forecast →
+                    View detailed forecast
+                    <Icon name="chart" className="ml-1 h-4 w-4" />
                   </Link>
                 </div>
               </div>
@@ -455,7 +495,8 @@ const Dashboard = () => {
           {/* Farm Overview */}
           <div className="bg-white shadow rounded-lg overflow-hidden">
             <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
-              <h3 className="text-lg leading-6 font-medium text-gray-900">
+              <h3 className="text-lg leading-6 font-medium text-gray-900 flex items-center">
+                <Icon name="plant" className="h-5 w-5 mr-2 text-green-600" />
                 Farm Overview
               </h3>
             </div>
@@ -464,7 +505,11 @@ const Dashboard = () => {
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 {/* Crop Health */}
                 <div>
-                  <h4 className="text-base font-medium text-gray-900 mb-2">
+                  <h4 className="text-base font-medium text-gray-900 mb-2 flex items-center">
+                    <Icon
+                      name="plant"
+                      className="h-4 w-4 mr-1 text-green-500"
+                    />
                     Crop Health
                   </h4>
                   <div className="h-4 bg-gray-200 rounded-full">
@@ -485,15 +530,24 @@ const Dashboard = () => {
                   </div>
                   <div className="mt-2 grid grid-cols-3 text-xs text-gray-500">
                     <div className="flex items-center">
-                      <div className="h-3 w-3 bg-green-500 rounded-full mr-1"></div>
+                      <Icon
+                        name="check"
+                        className="h-3 w-3 text-green-500 mr-1"
+                      />
                       Good ({stats.cropHealth.good}%)
                     </div>
                     <div className="flex items-center">
-                      <div className="h-3 w-3 bg-yellow-500 rounded-full mr-1"></div>
+                      <Icon
+                        name="alert"
+                        className="h-3 w-3 text-yellow-500 mr-1"
+                      />
                       Fair ({stats.cropHealth.fair}%)
                     </div>
                     <div className="flex items-center">
-                      <div className="h-3 w-3 bg-red-500 rounded-full mr-1"></div>
+                      <Icon
+                        name="warning"
+                        className="h-3 w-3 text-red-500 mr-1"
+                      />
                       Poor ({stats.cropHealth.poor}%)
                     </div>
                   </div>
@@ -501,7 +555,8 @@ const Dashboard = () => {
 
                 {/* Soil Moisture */}
                 <div>
-                  <h4 className="text-base font-medium text-gray-900 mb-2">
+                  <h4 className="text-base font-medium text-gray-900 mb-2 flex items-center">
+                    <Icon name="water" className="h-4 w-4 mr-1 text-blue-500" />
                     Soil Moisture
                   </h4>
                   <div className="h-4 bg-gray-200 rounded-full">
@@ -522,15 +577,24 @@ const Dashboard = () => {
                   </div>
                   <div className="mt-2 grid grid-cols-3 text-xs text-gray-500">
                     <div className="flex items-center">
-                      <div className="h-3 w-3 bg-yellow-500 rounded-full mr-1"></div>
+                      <Icon
+                        name="sun"
+                        className="h-3 w-3 text-yellow-500 mr-1"
+                      />
                       Dry ({stats.soilMoisture.dry}%)
                     </div>
                     <div className="flex items-center">
-                      <div className="h-3 w-3 bg-blue-500 rounded-full mr-1"></div>
+                      <Icon
+                        name="water"
+                        className="h-3 w-3 text-blue-500 mr-1"
+                      />
                       Optimal ({stats.soilMoisture.optimal}%)
                     </div>
                     <div className="flex items-center">
-                      <div className="h-3 w-3 bg-blue-700 rounded-full mr-1"></div>
+                      <Icon
+                        name="rain"
+                        className="h-3 w-3 text-blue-700 mr-1"
+                      />
                       Wet ({stats.soilMoisture.wet}%)
                     </div>
                   </div>
@@ -539,12 +603,16 @@ const Dashboard = () => {
 
               <div className="mt-6">
                 <div className="flex justify-between mb-2">
-                  <h4 className="text-base font-medium text-gray-900">
+                  <h4 className="text-base font-medium text-gray-900 flex items-center">
+                    <Icon
+                      name="field"
+                      className="h-4 w-4 mr-1 text-green-600"
+                    />
                     Field Status
                   </h4>
                   <Link
                     to="/dashboard/fields"
-                    className="text-sm text-green-600 hover:text-green-900"
+                    className="text-sm text-green-600 hover:text-green-900 flex items-center"
                   >
                     View all fields
                   </Link>
@@ -572,7 +640,11 @@ const Dashboard = () => {
                         <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">
                           Field 1
                         </td>
-                        <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">
+                        <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500 flex items-center">
+                          <Icon
+                            name="plant"
+                            className="h-4 w-4 mr-1 text-green-500"
+                          />
                           Corn
                         </td>
                         <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">
@@ -580,6 +652,7 @@ const Dashboard = () => {
                         </td>
                         <td className="px-3 py-2 whitespace-nowrap">
                           <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                            <Icon name="check" className="h-3 w-3 mr-1" />
                             Good
                           </span>
                         </td>
@@ -588,7 +661,11 @@ const Dashboard = () => {
                         <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">
                           Field 2
                         </td>
-                        <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">
+                        <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500 flex items-center">
+                          <Icon
+                            name="plant"
+                            className="h-4 w-4 mr-1 text-yellow-500"
+                          />
                           Wheat
                         </td>
                         <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">
@@ -596,6 +673,7 @@ const Dashboard = () => {
                         </td>
                         <td className="px-3 py-2 whitespace-nowrap">
                           <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                            <Icon name="alert" className="h-3 w-3 mr-1" />
                             Fair
                           </span>
                         </td>
@@ -604,7 +682,11 @@ const Dashboard = () => {
                         <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-900">
                           Field 3
                         </td>
-                        <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">
+                        <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500 flex items-center">
+                          <Icon
+                            name="plant"
+                            className="h-4 w-4 mr-1 text-green-500"
+                          />
                           Soybeans
                         </td>
                         <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">
@@ -612,6 +694,7 @@ const Dashboard = () => {
                         </td>
                         <td className="px-3 py-2 whitespace-nowrap">
                           <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                            <Icon name="check" className="h-3 w-3 mr-1" />
                             Good
                           </span>
                         </td>
@@ -630,7 +713,7 @@ const Dashboard = () => {
           <div className="bg-white shadow rounded-lg overflow-hidden">
             <div className="bg-red-100 px-4 py-5 sm:px-6 border-b border-gray-200">
               <h3 className="text-lg leading-6 font-medium text-red-800 flex items-center">
-                <ExclamationCircleIcon className="h-5 w-5 mr-2" />
+                <Icon name="warning" className="h-5 w-5 mr-2" />
                 Alerts ({alerts.length})
               </h3>
             </div>
@@ -638,33 +721,45 @@ const Dashboard = () => {
             <div className="px-4 py-5 sm:p-6 divide-y divide-gray-200">
               {alerts.length > 0 ? (
                 <div className="space-y-4">
-                  {alerts.map((alert) => (
-                    <div
-                      key={alert.id}
-                      className={`rounded-md ${severityColor(
-                        alert.severity
-                      )} p-3`}
-                    >
-                      <div className="flex">
-                        <div className="flex-shrink-0">
-                          <ExclamationCircleIcon className="h-5 w-5" />
-                        </div>
-                        <div className="ml-3">
-                          <h3 className="text-sm font-medium">
-                            {alert.message}
-                          </h3>
-                          <div className="mt-2 text-sm">
-                            <Link
-                              to={`/dashboard/alerts/${alert.id}`}
-                              className="font-medium underline"
-                            >
-                              View details
-                            </Link>
+                  {alerts.map((alert) => {
+                    const alertIconName =
+                      alert.iconName ||
+                      (alert.type === "weather"
+                        ? "cloud"
+                        : alert.type === "crop"
+                        ? "plant"
+                        : alert.type === "equipment"
+                        ? "tractor"
+                        : "warning");
+
+                    return (
+                      <div
+                        key={alert.id}
+                        className={`rounded-md ${severityColor(
+                          alert.severity
+                        )} p-3`}
+                      >
+                        <div className="flex">
+                          <div className="flex-shrink-0">
+                            <Icon name={alertIconName} className="h-5 w-5" />
+                          </div>
+                          <div className="ml-3">
+                            <h3 className="text-sm font-medium">
+                              {alert.message}
+                            </h3>
+                            <div className="mt-2 text-sm">
+                              <Link
+                                to={`/dashboard/alerts/${alert.id}`}
+                                className="font-medium underline"
+                              >
+                                View details
+                              </Link>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               ) : (
                 <p className="text-center text-gray-500 py-4">
@@ -675,9 +770,10 @@ const Dashboard = () => {
               <div className="pt-4 mt-4 text-sm text-right">
                 <Link
                   to="/dashboard/alerts"
-                  className="text-green-600 hover:text-green-900 font-medium"
+                  className="text-green-600 hover:text-green-900 font-medium flex items-center justify-end"
                 >
-                  View all alerts →
+                  View all alerts
+                  <Icon name="chart" className="ml-1 h-4 w-4" />
                 </Link>
               </div>
             </div>
@@ -687,7 +783,7 @@ const Dashboard = () => {
           <div className="bg-white shadow rounded-lg overflow-hidden">
             <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
               <h3 className="text-lg leading-6 font-medium text-gray-900 flex items-center">
-                <CalendarIcon className="h-5 w-5 mr-2" />
+                <Icon name="calendar" className="h-5 w-5 mr-2 text-green-600" />
                 Upcoming Tasks
               </h3>
             </div>
@@ -737,7 +833,8 @@ const Dashboard = () => {
           {/* Quick Actions */}
           <div className="bg-white shadow rounded-lg overflow-hidden">
             <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
-              <h3 className="text-lg leading-6 font-medium text-gray-900">
+              <h3 className="text-lg leading-6 font-medium text-gray-900 flex items-center">
+                <Icon name="clock" className="h-5 w-5 mr-2 text-green-600" />
                 Quick Actions
               </h3>
             </div>
@@ -747,7 +844,7 @@ const Dashboard = () => {
                 to="/dashboard/fields/add"
                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
               >
-                <ViewColumnsIcon className="-ml-1 mr-2 h-5 w-5" />
+                <Icon name="field" className="-ml-1 mr-2 h-5 w-5" />
                 Add Field
               </Link>
 
@@ -755,7 +852,7 @@ const Dashboard = () => {
                 to="/dashboard/tasks/add"
                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
               >
-                <CalendarIcon className="-ml-1 mr-2 h-5 w-5" />
+                <Icon name="calendar" className="-ml-1 mr-2 h-5 w-5" />
                 Schedule Task
               </Link>
 
@@ -763,7 +860,7 @@ const Dashboard = () => {
                 to="/dashboard/crops/add"
                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
               >
-                <SparklesIcon className="-ml-1 mr-2 h-5 w-5" />
+                <Icon name="plant" className="-ml-1 mr-2 h-5 w-5" />
                 Add Crop
               </Link>
 
@@ -771,9 +868,84 @@ const Dashboard = () => {
                 to="/dashboard/reports"
                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
               >
-                <DocumentIcon className="-ml-1 mr-2 h-5 w-5" />
+                <Icon name="document" className="-ml-1 mr-2 h-5 w-5" />
                 Generate Report
               </Link>
+            </div>
+          </div>
+
+          {/* Market Status */}
+          <div className="bg-white shadow rounded-lg overflow-hidden">
+            <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
+              <h3 className="text-lg leading-6 font-medium text-gray-900 flex items-center">
+                <Icon name="cart" className="h-5 w-5 mr-2 text-green-600" />
+                Farmers Market
+              </h3>
+            </div>
+
+            <div className="px-4 py-5 sm:p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h4 className="text-sm font-medium text-gray-500">
+                  Next Market Day
+                </h4>
+                <span className="text-sm font-semibold text-gray-900">
+                  Saturday, May 14
+                </span>
+              </div>
+
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center">
+                    <Icon
+                      name="plant"
+                      className="h-4 w-4 text-green-500 mr-2"
+                    />
+                    <span className="text-sm text-gray-900">
+                      Ready for Market
+                    </span>
+                  </div>
+                  <span className="text-sm font-medium text-gray-900">
+                    12 items
+                  </span>
+                </div>
+
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center">
+                    <Icon name="cart" className="h-4 w-4 text-blue-500 mr-2" />
+                    <span className="text-sm text-gray-900">
+                      Last Week Sales
+                    </span>
+                  </div>
+                  <span className="text-sm font-medium text-gray-900">
+                    $1,245.00
+                  </span>
+                </div>
+
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center">
+                    <Icon
+                      name="check"
+                      className="h-4 w-4 text-green-500 mr-2"
+                    />
+                    <span className="text-sm text-gray-900">
+                      Orders Pending
+                    </span>
+                  </div>
+                  <span className="text-sm font-medium text-gray-900">
+                    3 orders
+                  </span>
+                </div>
+              </div>
+
+              <div className="mt-4 pt-4 border-t border-gray-200">
+                <Link
+                  to="/dashboard/market"
+                  className="text-sm font-medium text-green-600 hover:text-green-900 flex items-center justify-end"
+                >
+                  View market details
+                  <Icon name="chart" className="ml-1 h-4 w-4" />
+                </Link>
+              </div>
             </div>
           </div>
         </div>

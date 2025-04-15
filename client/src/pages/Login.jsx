@@ -61,7 +61,7 @@ const Login = () => {
 
     try {
       const result = await login(formData.email, formData.password);
-      console.log("Login result:", result.successful);
+      console.log("Login result:", result);
       // Wait a moment for auth state to update
       await new Promise((resolve) => setTimeout(resolve, 500));
       navigate("/dashboard", { replace: true });
